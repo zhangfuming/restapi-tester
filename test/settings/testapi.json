@@ -1,0 +1,45 @@
+{
+  "projectname":"JRY API服务系统",
+  "apis":[
+      {
+         "name":"用户登录",
+         "hostname": "127.0.0.1",
+         "port": 3000,
+         "path": "/test/user/login",
+         "method": "POST",
+         "params":{"account":"C0001","password":"123456"}
+      },
+      {
+          "name":"获取用户信息",
+          "hostname": "127.0.0.1",
+          "port": 3000,
+          "path": "/test/user/info",
+          "method": "GET",
+          "params":{"account":"C0001"}
+      },
+      {
+          "name":"查询客户手机号",
+          "hostname": "127.0.0.1",
+          "port": 3000,
+          "path": "/test/user/mobile",
+          "method": "GET",
+          "params":{"account":"C0001"}
+      },
+      {
+          "name":"删除用户",
+          "hostname": "127.0.0.1",
+          "port": 3000,
+          "path": "/test/user/delete",
+          "method": "GET",
+          "params":{"id":12}
+      },
+      {
+          "name":"抽奖接口",
+          "hostname": "127.0.0.1",
+          "port": 3000,
+          "path": "/test/prize/get",
+          "method": "GET",
+          "params":{"account":"C0001"}
+      }
+  ]
+}

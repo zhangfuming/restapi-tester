@@ -1,0 +1,14 @@
+
+<div class="ui vertical menu">
+    <div class="header item">
+        <i class="globe icon"></i>
+        <%-name%>
+    </div>
+    <div class="item">
+        <div class="menu">
+            <% for(var i=0; i<apis.length; i++) {%>
+               <a class="item" href="#tag_<%=i%>" ><%=i + 1%>. <%= apis[i].name %></a>
+            <% } %>
+        </div>
+    </div>
+</div>

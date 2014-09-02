@@ -1,0 +1,105 @@
+
+<div class="positive ui button" onclick="testAll();"><i class="bug icon"></i>全部测试</div>
+
+<% for(var i=0; i<apis.length; i++) {%>
+
+<h4 class="ui top attached header" id="tag_<%=i%>" >
+    (<%=i + 1%>). <%= apis[i].name %>
+</h4>
+<div class="ui segment attached">
+    <div class="ui form small segment">
+        <div class="two fields">
+            <div class="field">
+                <label>HOST</label>
+                <input type="text" name="hostname" value="<%-apis[i].hostname%>">
+            </div>
+            <div class="field">
+                <label>PORT</label>
+                <input type="text" name="port" value="<%=apis[i].port%>">
+            </div>
+        </div>
+        <div class="two fields">
+            <div class="field">
+                <label>PATH</label>
+                <input type="text" name="path" value="<%-apis[i].path%>">
+            </div>
+            <div class="field">
+                <label>METHOD</label>
+                <input type="text" name="method" value="<%-apis[i].method%>">
+            </div>
+        </div>
+        <div class="field">
+            <label>PARAMS</label>
+            <input type="text" name="params" value="<%=JSON.stringify(apis[i].params)%>">
+        </div>
+        <div class="ui blue submit small button test-btn" onclick="testBtn(this);">测试</div>
+    </div>
+
+    <div class="result">
+    </div>
+</div>
+<!--<h4 class="ui bottom attached header">-->
+<!--</h4>-->
+
+<% } %>
+
+
+<script style="text/javascript">
+    function testAll(){
+        $(".test-btn").each(function(){
+            $(this).trigger("click");
+        });
+    }
+    function testBtn(dom){
+        var $obj = $(dom);
+        var params = {};
+        params.hostname = $obj.parent().find("input[name=hostname]").val();
+        params.path = $obj.parent().find("input[name=path]").val();
+        params.method = $obj.parent().find("input[name=method]").val();
+        params.params = $obj.parent().find("input[name=params]").val();
+        params.port = $obj.parent().find("input[name=port]").val();
+        console.log(JSON.stringify(params));
+        $.ajax({
+            type: "POST",
+            url: "/ajaxtelnet",
+            data: params,
+            cache:false,
+            dataType:"json",
+            success: function(msg){
+                var data = msg.data;
+                var headers = data.headers;
+                var body = data.body;
+                var headerFormat = new JSONFormat(JSON.stringify(headers));
+                var bodyFormat = new JSONFormat(JSON.stringify(body));
+
+                var html = "";
+                if(data.status != 200){
+                    html += "<div class=\"ui warning message\">";
+                }else{
+                    html += "<div class=\"ui success message\">";
+                }
+
+                html += "<div class=\"header\">Action SUCCESS</div>" +
+                           "<dl>status:" +
+                              "<dd>"+data.status+"</dd>" +
+                           "</dl>" +
+                           "<dl>headers:" +
+                              "<dd>"+headerFormat.toString()+"</dd>" +
+                           "</dl>" +
+                           "<dl>body:" +
+                              "<dd>"+bodyFormat.toString()+"</dd>" +
+                           "</dl>" +
+                           "</div>";
+                $obj.parent().next(".result").empty().append(html);
+            },
+            error : function(msg){
+                var jsonFormat = new JSONFormat(JSON.stringify(msg.responseJSON));
+                var html = "<div class=\"ui error message\">" +
+                        "<div class=\"header\">Action ERROR</div>" +
+                        "<p>"+jsonFormat.toString()+"</p>" +
+                        "</div>";
+                $obj.parent().next(".result").empty().append(html);
+            }
+        });
+    }
+</script>
