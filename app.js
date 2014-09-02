@@ -46,7 +46,6 @@ app.get('/test/user/info', TestApiController.queryUser);
 app.get('/test/user/mobile', TestApiController.queryMobile);
 app.get('/test/user/delete', TestApiController.delete);
 app.get('/test/prize/get', TestApiController.prize);
-//app.get('/test/user/fromdb',TestApiController.getUserFromMysql);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
