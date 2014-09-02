@@ -18,6 +18,9 @@ $(function(){
         console.log(message);
         alert("发送失败");
     });
+    adminClient.on('count', function (message) {
+         $("#user-count").text(message.count);
+    });
 
 });
 

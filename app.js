@@ -46,6 +46,7 @@ app.get('/test/user/info', TestApiController.queryUser);
 app.get('/test/user/mobile', TestApiController.queryMobile);
 app.get('/test/user/delete', TestApiController.delete);
 app.get('/test/prize/get', TestApiController.prize);
+app.get('/test/getuser', TestApiController.getuser);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
@@ -58,6 +59,7 @@ http.createServer(app).listen(app.get('port'), function(){
 /**********************************************************************/
 /************************* socket io *********************************/
 /**********************************************************************/
+var count = 0;
 var ChatMessageModel = require("./src/model/mongodb/ChatMessageModel");
 var RedisChatModel = require("./src/model/redis/RedisChatModel");
 var io = require('socket.io').listen(3001);
@@ -87,10 +89,15 @@ var clientSocketRoute = io
     .on('connection', function (socket) {
         socket.on('disconnect', function (message) {
             console.log("client disconnect");
+            count--;
+            if(count <=0 )count =0;
+            io.of("/admin").emit("count",{count:count});
         });
         socket.on('userin', function (message) {
             console.log(message);
             socket.emit("welcome",{message: "欢迎进入系统",author:"系统通知",dt:new Date().getTime()});
+            count++;
+            io.of("/admin").emit("count",{count:count});
         });
 }) ;
 //listen message channel

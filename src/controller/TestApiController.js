@@ -33,3 +33,29 @@ exports.prize = function(req,res){
     res.set("Content-type","application/json");
     res.send(200,{account:"C00001",prize:100001,message:"恭喜您，抽中iphone5s一台"})
 }
+
+//根据账号获取用户信息
+exports.getuser = function(req,res){
+    var account = req.query.account;
+    res.set("Content-type","application/json");
+
+    var AccountService = require("../service/AccountService");
+    AccountService.getUserInfoByAccount(account,function(err,result){
+        if(err){
+            res.send(500,{error:err});
+        }else{
+//        `account` varchar(255) NOT NULL,
+//  `password` varchar(255) NOT NULL,
+//  `real_name` varchar(255) NOT NULL,
+//  `email` varchar(255) NOT NULL,
+//  `create_user` bigint(20) NOT NULL,
+//  `create_date` datetime NOT NULL,
+            res.send(200,
+                {
+                    account:result.account,
+                    real_name:result.real_name
+                }
+            )
+        }
+    });
+}
